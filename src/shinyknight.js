@@ -84,7 +84,7 @@ export class ShinyKnight {
         d -= (6 - ap);
       }
     } else if(this.armor == 'Full Plate') {
-      if(srpe_att) { // characters don't get to use armor values when surprise attacked
+      if(!srpe_att) { // characters don't get to use armor values when surprise attacked
         d -= (12 - ap);
       }
     }

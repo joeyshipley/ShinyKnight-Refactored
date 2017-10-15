@@ -53,8 +53,42 @@ describe('ShinyKnights Battle Foes', () => {
     describe('and they are wearing leather armor,', () => {
       it('it applies reduced damage', () => {
         CUT.armor = 'Leather';
-        const result = CUT.dmg('unknown', 7, 0, false, OPPONENT);
-        expect(result).to.equal('You have suffered 5 wounds and now have 15 health left');
+        const result = CUT.dmg('unknown', 15, 0, false, OPPONENT);
+        expect(result).to.equal('You have suffered 13 wounds and now have 7 health left');
+      });
+
+      it('it does not protect when suprised', () => {
+        CUT.armor = 'Leather';
+        const result = CUT.dmg('unknown', 10, 0, true, OPPONENT);
+        expect(result).to.equal('You have suffered 15 wounds and now have 5 health left');
+      });
+    });
+
+    describe('and they are wearing chain mail,', () => {
+      it('it applies reduced damage', () => {
+        CUT.armor = 'Chain mail';
+        const result = CUT.dmg('unknown', 15, 0, false, OPPONENT);
+        expect(result).to.equal('You have suffered 9 wounds and now have 11 health left');
+      });
+
+      it('it does not protect when suprised', () => {
+        CUT.armor = 'Chain mail';
+        const result = CUT.dmg('unknown', 10, 0, true, OPPONENT);
+        expect(result).to.equal('You have suffered 15 wounds and now have 5 health left');
+      });
+    });
+
+    describe('and they are wearing full plate,', () => {
+      it('it applies reduced damage', () => {
+        CUT.armor = 'Full Plate';
+        const result = CUT.dmg('unknown', 15, 0, false, OPPONENT);
+        expect(result).to.equal('You have suffered 3 wounds and now have 17 health left');
+      });
+
+      it('it does not protect when suprised', () => {
+        CUT.armor = 'Full Plate';
+        const result = CUT.dmg('unknown', 10, 0, true, OPPONENT);
+        expect(result).to.equal('You have suffered 15 wounds and now have 5 health left');
       });
     });
 
