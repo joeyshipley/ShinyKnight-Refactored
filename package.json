@@ -1,0 +1,22 @@
+{
+  "name": "shinyknight",
+  "version": "1.0.0",
+  "description": "The ShinyKnight Kata in JS",
+  "author": "Joey Shipley",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joeyshipley/ShinyKnight-Refactored.git"
+  },
+  "scripts": {
+    "test": "mocha tests --require babel-polyfill --compilers js:babel-register"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.26.0",
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "sinon": "^4.0.1"
+  }
+}
