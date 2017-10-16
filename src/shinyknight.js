@@ -19,7 +19,6 @@ export class ShinyKnight {
     damage_amount,
     armor_penetration,
     is_surprise_attack //, // NOTE: boolean value
-    // attacking_character // NOTE: not currently used
   ) {
     // TODO: Explore if there is temporal coupling with these internals?
 
@@ -38,8 +37,6 @@ export class ShinyKnight {
 
     this._apply_damage_to_character(damage_amount);
 
-    this._UNUSED_check_perform_counter_attack();
-
     return this._format_response(damage_amount);
   }
 
@@ -52,8 +49,6 @@ export class ShinyKnight {
   }
 
   _adjust_evade_multiplier(damage_amount) {
-    // TODO: move this note into backlog and out of codebase
-    // NOTE: consider redesigning this feature, the original value was way to strong, temp reducing the divider
     return damage_amount / RULES.MODIFIER.EVADE_REDUCTION;
   }
 
@@ -105,37 +100,6 @@ export class ShinyKnight {
 
   _adjust_appropriate_damage_range(damage_amount) {
     return (damage_amount < RULES.CHECK.MIN_HEALTH) ? RULES.CHECK.MIN_HEALTH : Math.floor(damage_amount);
-  }
-
-  _UNUSED_check_perform_counter_attack() {
-    // NOTE: this is becoming to painful, removing until we figure out
-    // how to handle all the different combos for the counter attack
-    // if this.c_hp > 0 && !srpe_att && (rand(100) + 1 < this.c_counter)
-    //   if(this.c_class == RULES.CHARACTER_CLASS.KNIGHT && this.weapon == 'Short Sword') {
-    //     char_att.dmg('physical', rand(10) + 2, 0, false)
-    //   }
-    //   if(this.c_class == RULES.CHARACTER_CLASS.KNIGHT && this.weapon == 'Longsword') {
-    //     char_att.dmg('physical', rand(20) + 2, 0, false)
-    //   }
-    //   if(this.c_class == RULES.CHARACTER_CLASS.KNIGHT && this.weapon == 'Battle Axe') {
-    //     char_att.dmg('physical', rand(11) + 10, 0, false)
-    //   }
-    //   if(this.c_class == RULES.CHARACTER_CLASS.WIZARD && this.weapon == 'Fireball') {
-    //     char_att.dmg('fire', rand(10) + 6, 0, false)
-    //   }
-    //   if(this.c_class == RULES.CHARACTER_CLASS.WIZARD && this.weapon == 'Ice Spikes') {
-    //     char_att.dmg('ice', rand(10) + 6, 0, false)
-    //   }
-    //   if(this.c_class == RULES.CHARACTER_CLASS.WIZARD && this.weapon == 'Crushing Grasp') {
-    //     char_att.dmg('magic', rand(10) + 6, 0, false)
-    //   }
-    //   if(this.c_class == RULES.CHARACTER_CLASS.SHINOBI && this.weapon == 'Tanto') {
-    //     char_att.dmg('magic', rand(6) + 6, 6, false)
-    //   }
-    //   if(this.c_class == RULES.CHARACTER_CLASS.SHINOBI && this.weapon == 'Ninjato') {
-    //     char_att.dmg('magic', rand(12) + 6, 3, false)
-    //   }
-    // }
   }
 
   _format_response(damage_amount) {
