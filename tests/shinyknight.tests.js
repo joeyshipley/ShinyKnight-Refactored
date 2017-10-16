@@ -5,19 +5,19 @@ import { ShinyKnight } from '../src/shinyknight.js';
 import { MATH } from '../src/util/math.utils';
 
 let CUT, OPPONENT;
-let evade_chance;
+let roll_100;
 
 beforeEach(() => {
   CUT = new ShinyKnight();
   CUT.armor = null;
-  evade_chance = sinon.stub(MATH, "evade_chance");
-  evade_chance.callsFake(() => { return 1; });
+  roll_100 = sinon.stub(MATH, "roll_100");
+  roll_100.callsFake(() => { return 1; });
 
   OPPONENT = new ShinyKnight();
 });
 
 afterEach(() => {
-  evade_chance.restore();
+  roll_100.restore();
 });
 
 describe('ShinyKnights Battle Foes', () => {
@@ -464,7 +464,7 @@ describe('ShinyKnights Battle Foes', () => {
 
     describe('and they did not evade,', () => {
       it('it applies damage without evade reduction', () => {
-        evade_chance.callsFake(() => { return 1; });
+        roll_100.callsFake(() => { return 1; });
 
         const attack = OPPONENT.generate_attack('unknown', 8, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
@@ -474,7 +474,7 @@ describe('ShinyKnights Battle Foes', () => {
 
     describe('and they evaded some of the attack,', () => {
       it('it applies reduced damage', () => {
-        evade_chance.callsFake(() => { return 100; });
+        roll_100.callsFake(() => { return 100; });
 
         const attack = OPPONENT.generate_attack('unknown', 8, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
@@ -484,7 +484,7 @@ describe('ShinyKnights Battle Foes', () => {
 
     describe('and they would have evaded but it was a surprise attack,', () => {
       it('it applies damage without evade reduction', () => {
-        evade_chance.callsFake(() => { return 100; });
+        roll_100.callsFake(() => { return 100; });
 
         const attack = OPPONENT.generate_attack('unknown', 8, null, true);
         const result = CUT.defend_against_surprise_attack(attack.type_of_damage, attack.damage_amount);

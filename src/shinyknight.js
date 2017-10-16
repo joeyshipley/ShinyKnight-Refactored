@@ -1,4 +1,5 @@
 import { MATH } from './util/math.utils.js';
+import { CHECK } from './util/check.utils.js';
 import { RULES } from './gameRules.constants';
 
 export class ShinyKnight {
@@ -27,7 +28,7 @@ export class ShinyKnight {
   }
 
   defend_against_attack(type_of_damage, damage_amount, armor_penetration) {
-    if(this._has_evaded()) {
+    if(CHECK.has_evaded(this.c_evade)) {
       damage_amount = this._adjust_evade_multiplier(damage_amount);
     }
     damage_amount = this._adjust_armor_resitances(armor_penetration, damage_amount);
@@ -48,10 +49,6 @@ export class ShinyKnight {
   _apply_damage_to_character(damage_amount) {
     const final_damage_amount = this._adjust_appropriate_damage_range(damage_amount);
     this.c_hp -= final_damage_amount;
-  }
-
-  _has_evaded() {
-    return MATH.evade_chance() > ( RULES.CHECK.BASE_EVADE - this.c_evade );
   }
 
   _adjust_evade_multiplier(damage_amount) {
