@@ -27,13 +27,13 @@ export class ShinyKnight {
       // NOTE: this feels like it belongs to the attacker, not the defender
       damage_amount = this._adjust_surprise_attack_multipler(damage_amount);
     }
-    if(this._has_evaded(is_surprise_attack)) {
-      damage_amount = this._adjust_evade_multiplier(damage_amount);
-    }
-    damage_amount = this._adjust_damage_type_resitances(type_of_damage, damage_amount);
     if(!is_surprise_attack) {
       damage_amount = this._adjust_armor_resitances(armor_penetration, damage_amount);
     }
+    if(!is_surprise_attack && this._has_evaded()) {
+      damage_amount = this._adjust_evade_multiplier(damage_amount);
+    }
+    damage_amount = this._adjust_damage_type_resitances(type_of_damage, damage_amount);
     damage_amount = this._adjust_appropriate_damage_range(damage_amount);
 
     this._apply_damage_to_character(damage_amount);
@@ -47,9 +47,8 @@ export class ShinyKnight {
     this.c_hp -= final_damage_amount;
   }
 
-  _has_evaded(is_surprise_attack) {
-    return !is_surprise_attack
-      && MATH.evade_chance() > ( RULES.CHECK.BASE_EVADE - this.c_evade );
+  _has_evaded() {
+    return MATH.evade_chance() > ( RULES.CHECK.BASE_EVADE - this.c_evade );
   }
 
   _adjust_evade_multiplier(damage_amount) {
