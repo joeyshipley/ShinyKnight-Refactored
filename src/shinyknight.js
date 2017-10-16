@@ -28,84 +28,99 @@ export class ShinyKnight {
     var srpe_att = is_surprise_attack;
     var char_att = attacking_character;
 
-    // surprise attacks do more damage
+    // TODO: Explore if there is temporal coupling with these internals?
+
     if(srpe_att) {
-      d = d * RULES.MODIFIER.SURPRISE_DAMAGE;
+      // NOTE: this feels like it belongs to the attacker, not the defender
+      d = this._adjust_surprise_attack_multipler(d);
     }
-
-    // when you see it coming, there is a chance that you get to evade part of the damage
-    if(!srpe_att && (MATH.evade_chance() > RULES.CHECK.BASE_EVADE - this.c_evade)) {
-      d = d / RULES.MODIFIER.EVADE_REDUCTION; // consider redesigning this feature, the original value was way to strong, temp reducing the divider
+    if(this._has_evaded(srpe_att)) {
+      d = this._adjust_evade_multiplier(d);
     }
+    d = this._adjust_damage_type_resitances(d_type, d);
+    d = this._adjust_armor_resitances(srpe_att, ap, d);
+    d = this._adjust_appropriate_damage_range(d);
 
-    // modify damage based on your resistances to the different types
-    switch(d_type) {
+    this._apply_damage_to_character(d);
+
+    this._UNUSED_check_perform_counter_attack();
+
+    return this._format_response(d);
+  }
+
+  _apply_damage_to_character(final_damage_amount) {
+    this.c_hp -= final_damage_amount;
+  }
+
+  _has_evaded(is_surprise_attack) {
+    return !is_surprise_attack
+      && MATH.evade_chance() > ( RULES.CHECK.BASE_EVADE - this.c_evade );
+  }
+
+  _adjust_evade_multiplier(damage_amount) {
+    // TODO: move this note into backlog and out of codebase
+    // NOTE: consider redesigning this feature, the original value was way to strong, temp reducing the divider
+    return damage_amount / RULES.MODIFIER.EVADE_REDUCTION;
+  }
+
+  _adjust_surprise_attack_multipler(damage_amount) {
+    return damage_amount * RULES.MODIFIER.SURPRISE_DAMAGE;
+  }
+
+  _adjust_damage_type_resitances(type_of_damage, damage_amount) {
+    switch(type_of_damage) {
       case RULES.DAMAGE_TYPE.STANDARD:
-        d -= this.c_class == RULES.CHARACTER_CLASS.KNIGHT ? 10 : RULES.RESIST_TYPE_BASE_VALUE.STANDARD; // Warriors get a special resistance to standard damage
-        break;
+        return this.c_class == RULES.CHARACTER_CLASS.KNIGHT ? damage_amount - 10 : damage_amount - RULES.RESIST_TYPE_BASE_VALUE.STANDARD; // Warriors get a special resistance to standard damage
       case RULES.DAMAGE_TYPE.MAGIC:
-        d -= this.c_class == RULES.CHARACTER_CLASS.WIZARD ? 10 : RULES.RESIST_TYPE_BASE_VALUE.MAGIC; // Magi get a special resistance to magic damage
-        break;
+        return this.c_class == RULES.CHARACTER_CLASS.WIZARD ? damage_amount - 10 : damage_amount - RULES.RESIST_TYPE_BASE_VALUE.MAGIC; // Magi get a special resistance to magic damage
       case RULES.DAMAGE_TYPE.EARTH:
-        d -= RULES.RESIST_TYPE_BASE_VALUE.EARTH;
-        break;
+        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.EARTH;
       case RULES.DAMAGE_TYPE.FIRE:
-        d -= RULES.RESIST_TYPE_BASE_VALUE.FIRE;
-        break;
+        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.FIRE;
       case RULES.DAMAGE_TYPE.WATER:
-        d -= RULES.RESIST_TYPE_BASE_VALUE.WATER;
-        break;
+        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.WATER;
       case RULES.DAMAGE_TYPE.WIND:
-        d -= RULES.RESIST_TYPE_BASE_VALUE.WIND;
-        break;
+        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.WIND;
       case RULES.DAMAGE_TYPE.SHADOW:
-        d -= this.c_class == RULES.CHARACTER_CLASS.SHINOBI ? 10 : RULES.RESIST_TYPE_BASE_VALUE.SHADOW; // Rogue get a special resistance to shadow damage
-        break;
+        return this.c_class == RULES.CHARACTER_CLASS.SHINOBI ? damage_amount - 10 : damage_amount - RULES.RESIST_TYPE_BASE_VALUE.SHADOW; // Rogue get a special resistance to shadow damage
       case RULES.DAMAGE_TYPE.ICE:
-        d -= RULES.RESIST_TYPE_BASE_VALUE.ICE;
-        break;
+        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.ICE;
       case RULES.DAMAGE_TYPE.LIGHTNING:
-        d -= RULES.RESIST_TYPE_BASE_VALUE.LIGHTNING;
-        break;
+        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.LIGHTNING;
       case RULES.DAMAGE_TYPE.DARK:
-        d -= RULES.RESIST_TYPE_BASE_VALUE.DARK;
-        break;
+        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.DARK;
       case RULES.DAMAGE_TYPE.LIGHT:
-        d -= RULES.RESIST_TYPE_BASE_VALUE.LIGHT;
-        break;
+        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.LIGHT;
       case RULES.DAMAGE_TYPE.PSIONIC:
-        d -= RULES.RESIST_TYPE_BASE_VALUE.PSIONIC;
-        break;
+        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.PSIONIC;
       default:
-        d -= RULES.RESIST_TYPE_BASE_VALUE.UNKNOWN;
-        break;
+        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.UNKNOWN;
     }
+  }
 
-    // modify damage based on armor worn
+  _adjust_armor_resitances(is_surprise_attack, armor_penetration, damage_amount) {
     if(this.armor == RULES.ARMOR.LEATHER) {
-      if(!srpe_att) { // characters don't get to use armor values when surprise attacked
-        d -= (RULES.ARMOR.LEATHER_DEFENSE - ap);
+      if(!is_surprise_attack) { // characters don't get to use armor values when surprise attacked
+        return damage_amount - (RULES.ARMOR.LEATHER_DEFENSE - armor_penetration);
       }
     } else if(this.armor == RULES.ARMOR.CHAIN_MAIL) {
-      if(!srpe_att) { // characters don't get to use armor values when surprise attacked
-        d -= (RULES.ARMOR.CHAIN_MAIL_DEFENSE - ap);
+      if(!is_surprise_attack) { // characters don't get to use armor values when surprise attacked
+        return damage_amount - (RULES.ARMOR.CHAIN_MAIL_DEFENSE - armor_penetration);
       }
     } else if(this.armor == RULES.ARMOR.FULL_PLATE) {
-      if(!srpe_att) { // characters don't get to use armor values when surprise attacked
-        d -= (RULES.ARMOR.FULL_PLATE_DEFENSE - ap);
+      if(!is_surprise_attack) { // characters don't get to use armor values when surprise attacked
+        return damage_amount - (RULES.ARMOR.FULL_PLATE_DEFENSE - armor_penetration);
       }
     }
 
-    // make sure we don't give them hp when they block it
-    if(d < RULES.CHECK.MIN_HEALTH) {
-      d = RULES.CHECK.MIN_HEALTH;
-    }
+    return damage_amount;
+  }
 
-    d = Math.floor(d);
+  _adjust_appropriate_damage_range(damage_amount) {
+    return (damage_amount < RULES.CHECK.MIN_HEALTH) ? RULES.CHECK.MIN_HEALTH : Math.floor(damage_amount);
+  }
 
-    // apply the damage
-    this.c_hp = this.c_hp - d;
-
+  _UNUSED_check_perform_counter_attack() {
     // NOTE: this is becoming to painful, removing until we figure out
     // how to handle all the different combos for the counter attack
     // if this.c_hp > 0 && !srpe_att && (rand(100) + 1 < this.c_counter)
@@ -134,16 +149,17 @@ export class ShinyKnight {
     //     char_att.dmg('magic', rand(12) + 6, 3, false)
     //   }
     // }
+  }
 
-    // display results
-    if(d == RULES.CHECK.NO_DAMAGE) {
+  _format_response(damage_amount) {
+    if(damage_amount == RULES.CHECK.NO_DAMAGE) {
       return 'You suffered no damage from the attack, way to go!';
     } else if(this.c_hp <= RULES.CHECK.MIN_HEALTH) {
       if(this.c_lvl > RULES.CHECK.MIN_LEVEL) { this.c_lvl -= 1 }
       this.c_hp = 20;
       return `You ${ this.c_name } have perished. You respawn back at town square but have suffered loss in level. You are now level ${ this.c_lvl }`;
     } else {
-      return `You have suffered ${ d } wounds and now have ${ this.c_hp } health left`;
+      return `You have suffered ${ damage_amount } wounds and now have ${ this.c_hp } health left`;
     }
   }
 }
