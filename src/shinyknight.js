@@ -14,6 +14,18 @@ export class ShinyKnight {
     this.weapon = RULES.WEAPON.LONGSWORD;
   }
 
+  generate_attack(type_of_damage, damage_amount, armor_penatration, is_surprise_attack) {
+    // NOTE: out of scope of exercise. Would not pass in surprise if it were real code.
+    if(is_surprise_attack) {
+      damage_amount = this._adjust_surprise_attack_multipler(damage_amount);
+    }
+    return {
+      type_of_damage: type_of_damage,
+      armor_penatration: armor_penatration,
+      damage_amount: damage_amount
+    }
+  }
+
   defend_against_attack(type_of_damage, damage_amount, armor_penetration) {
     damage_amount = this._adjust_armor_resitances(armor_penetration, damage_amount);
     if(this._has_evaded()) {
@@ -23,9 +35,6 @@ export class ShinyKnight {
   }
 
   defend_against_surprise_attack(type_of_damage, damage_amount) {
-    // NOTE: this feels like it belongs to the attacker, not the defender
-    damage_amount = this._adjust_surprise_attack_multipler(damage_amount);
-
     return this._process_defense(type_of_damage, damage_amount);
   }
 
