@@ -22,14 +22,14 @@ afterEach(() => {
 describe('ShinyKnights Battle Foes', () => {
   describe('#dmg => When our Young Squire is concerned about how much damage they take', () => {
 
-    describe('and they recieved a weak attack,', () => {
+    describe('and they received a weak attack,', () => {
       it('it does not apply damage', () => {
         const result = CUT.dmg('unknown', 0, 0, false, OPPONENT);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
     });
 
-    describe('and they recieved an overpowering attack,', () => {
+    describe('and they received an overpowering attack,', () => {
       it('it defeats the ShinyKnight', () => {
         const result = CUT.dmg('unknown', 100, 0, false, OPPONENT);
         expect(result).to.equal('You Sir Joseph have perished. You respawn back at town square but have suffered loss in level. You are now level 1');
@@ -65,7 +65,7 @@ describe('ShinyKnights Battle Foes', () => {
         expect(result).to.equal('You have suffered 8 wounds and now have 12 health left');
       });
 
-      it('it does not take armor penatration into account', () => {
+      it('it does not take armor penetration into account', () => {
         CUT.armor = 'Leather';
         const result = CUT.dmg('unknown', 8, 2, false, OPPONENT);
         expect(result).to.equal('You have suffered 8 wounds and now have 12 health left');
@@ -79,13 +79,13 @@ describe('ShinyKnights Battle Foes', () => {
         expect(result).to.equal('You have suffered 13 wounds and now have 7 health left');
       });
 
-      it('it does not protect when suprised', () => {
+      it('it does not protect when surprised', () => {
         CUT.armor = 'Leather';
         const result = CUT.dmg('unknown', 10, 0, true, OPPONENT);
         expect(result).to.equal('You have suffered 15 wounds and now have 5 health left');
       });
 
-      it('it\'s effectiveness is reduced from armor penatration', () => {
+      it('it\'s effectiveness is reduced from armor penetration', () => {
         CUT.armor = 'Leather';
         const result = CUT.dmg('unknown', 15, 2, false, OPPONENT);
         expect(result).to.equal('You have suffered 15 wounds and now have 5 health left');
@@ -99,13 +99,13 @@ describe('ShinyKnights Battle Foes', () => {
         expect(result).to.equal('You have suffered 9 wounds and now have 11 health left');
       });
 
-      it('it does not protect when suprised', () => {
+      it('it does not protect when surprised', () => {
         CUT.armor = 'Chain mail';
         const result = CUT.dmg('unknown', 10, 0, true, OPPONENT);
         expect(result).to.equal('You have suffered 15 wounds and now have 5 health left');
       });
 
-      it('it\'s effectiveness is reduced from armor penatration', () => {
+      it('it\'s effectiveness is reduced from armor penetration', () => {
         CUT.armor = 'Chain mail';
         const result = CUT.dmg('unknown', 15, 2, false, OPPONENT);
         expect(result).to.equal('You have suffered 11 wounds and now have 9 health left');
@@ -119,13 +119,13 @@ describe('ShinyKnights Battle Foes', () => {
         expect(result).to.equal('You have suffered 3 wounds and now have 17 health left');
       });
 
-      it('it does not protect when suprised', () => {
+      it('it does not protect when surprised', () => {
         CUT.armor = 'Full Plate';
         const result = CUT.dmg('unknown', 10, 0, true, OPPONENT);
         expect(result).to.equal('You have suffered 15 wounds and now have 5 health left');
       });
 
-      it('it\'s effectiveness is reduced from armor penatration', () => {
+      it('it\'s effectiveness is reduced from armor penetration', () => {
         CUT.armor = 'Full Plate';
         const result = CUT.dmg('unknown', 15, 2, false, OPPONENT);
         expect(result).to.equal('You have suffered 5 wounds and now have 15 health left');
@@ -136,16 +136,16 @@ describe('ShinyKnights Battle Foes', () => {
 });
 
 describe('ShinyKnights Battle Foes', () => {
-  describe('#dmg => When our Perceptive Sentry is concerned about suprise attacks', () => {
+  describe('#dmg => When our Perceptive Sentry is concerned about surprise attacks', () => {
 
-    describe('and they were suprised by the attack,', () => {
+    describe('and they were surprised by the attack,', () => {
       it('it applies damage extra damage', () => {
         const result = CUT.dmg('unknown', 8, 0, true, OPPONENT);
         expect(result).to.equal('You have suffered 12 wounds and now have 8 health left');
       });
     });
 
-    describe('and they were not suprised by the attack,', () => {
+    describe('and they were not surprised by the attack,', () => {
       it('it does not increase the damage', () => {
         const result = CUT.dmg('unknown', 8, 0, false, OPPONENT);
         expect(result).to.equal('You have suffered 8 wounds and now have 12 health left');
@@ -156,9 +156,9 @@ describe('ShinyKnights Battle Foes', () => {
 });
 
 describe('ShinyKnights Battle Foes', () => {
-  describe('#dmg => When our Verstile Champion is concerned about the type of an attack', () => {
+  describe('#dmg => When our Versatile Champion is concerned about the type of an attack', () => {
 
-    describe('and they are a Knights reciving an attack,', () => {
+    describe('and they are a Knights receiving an attack,', () => {
       it('it\'s standard attack reduced damage', () => {
         CUT.c_class = 'Knight';
         const result = CUT.dmg('standard', 11, 0, false, OPPONENT);
@@ -238,7 +238,7 @@ describe('ShinyKnights Battle Foes', () => {
       });
     });
 
-    describe('and they are a Wizard reciving an attack,', () => {
+    describe('and they are a Wizard receiving an attack,', () => {
       it('it\'s standard attack reduced damage', () => {
         CUT.c_class = 'Wizard';
         const result = CUT.dmg('standard', 11, 0, false, OPPONENT);
@@ -318,7 +318,7 @@ describe('ShinyKnights Battle Foes', () => {
       });
     });
 
-    describe('and they are a Shinobi reciving an attack,', () => {
+    describe('and they are a Shinobi receiving an attack,', () => {
       it('it\'s standard attack reduced damage', () => {
         CUT.c_class = 'Shinobi';
         const result = CUT.dmg('standard', 11, 0, false, OPPONENT);
@@ -422,7 +422,7 @@ describe('ShinyKnights Battle Foes', () => {
       });
     });
 
-    describe('and they would have evaded but it was a suprise attack,', () => {
+    describe('and they would have evaded but it was a surprise attack,', () => {
       it('it applies damage without evade reduction', () => {
         evade_chance.callsFake(() => { return 100; });
 
