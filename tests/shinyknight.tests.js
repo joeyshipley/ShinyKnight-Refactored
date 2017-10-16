@@ -82,6 +82,15 @@ describe('ShinyKnights Battle Foes', () => {
       });
     });
 
+    describe('and they are wearing armor and armor penetration is above the defense value,', () => {
+      it('it does not decrease damage past armor value', () => {
+        CUT.armor = new LeatherArmor();
+        const attack = OPPONENT.generate_attack('unknown', 8, 999, false);
+        const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
+        expect(result).to.equal('You have suffered 8 wounds and now have 12 health left');
+      });
+    });
+
     describe('and they are wearing leather armor,', () => {
       it('it applies reduced damage', () => {
         CUT.armor = new LeatherArmor();
