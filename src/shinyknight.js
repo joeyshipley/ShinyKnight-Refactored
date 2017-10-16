@@ -15,50 +15,28 @@ export class ShinyKnight {
   }
 
   defend_against_attack(type_of_damage, damage_amount, armor_penetration) {
-    return this.determine_damage_amount_and_apply_damage_from_attack_whether_suprise_or_not(
-      type_of_damage,
-      damage_amount,
-      armor_penetration,
-      false
-    );
+    damage_amount = this._adjust_armor_resitances(armor_penetration, damage_amount);
+    if(this._has_evaded()) {
+      damage_amount = this._adjust_evade_multiplier(damage_amount);
+    }
+    return this._process_defense(type_of_damage, damage_amount);
   }
 
   defend_against_surprise_attack(type_of_damage, damage_amount) {
-    return this.determine_damage_amount_and_apply_damage_from_attack_whether_suprise_or_not(
-      type_of_damage,
-      damage_amount,
-      null,
-      true
-    );
+    // NOTE: this feels like it belongs to the attacker, not the defender
+    damage_amount = this._adjust_surprise_attack_multipler(damage_amount);
+
+    return this._process_defense(type_of_damage, damage_amount);
   }
 
-  determine_damage_amount_and_apply_damage_from_attack_whether_suprise_or_not(
-    type_of_damage,
-    damage_amount,
-    armor_penetration,
-    is_surprise_attack //, // NOTE: boolean value
-  ) {
-    // TODO: Explore if there is temporal coupling with these internals?
-
-    if(is_surprise_attack) {
-      // NOTE: this feels like it belongs to the attacker, not the defender
-      damage_amount = this._adjust_surprise_attack_multipler(damage_amount);
-    }
-    if(!is_surprise_attack) {
-      damage_amount = this._adjust_armor_resitances(armor_penetration, damage_amount);
-    }
-    if(!is_surprise_attack && this._has_evaded()) {
-      damage_amount = this._adjust_evade_multiplier(damage_amount);
-    }
+  _process_defense(type_of_damage, damage_amount) {
     damage_amount = this._adjust_damage_type_resitances(type_of_damage, damage_amount);
-    damage_amount = this._adjust_appropriate_damage_range(damage_amount);
-
     this._apply_damage_to_character(damage_amount);
-
     return this._format_response(damage_amount);
   }
 
-  _apply_damage_to_character(final_damage_amount) {
+  _apply_damage_to_character(damage_amount) {
+    const final_damage_amount = this._adjust_appropriate_damage_range(damage_amount);
     this.c_hp -= final_damage_amount;
   }
 
@@ -121,14 +99,15 @@ export class ShinyKnight {
   }
 
   _format_response(damage_amount) {
-    if(damage_amount == RULES.CHECK.NO_DAMAGE) {
+    const final_damage_amount = this._adjust_appropriate_damage_range(damage_amount);
+    if(final_damage_amount == RULES.CHECK.NO_DAMAGE) {
       return 'You suffered no damage from the attack, way to go!';
     } else if(this.c_hp <= RULES.CHECK.MIN_HEALTH) {
       if(this.c_lvl > RULES.CHECK.MIN_LEVEL) { this.c_lvl -= 1 }
       this.c_hp = 20;
       return `You ${ this.c_name } have perished. You respawn back at town square but have suffered loss in level. You are now level ${ this.c_lvl }`;
     } else {
-      return `You have suffered ${ damage_amount } wounds and now have ${ this.c_hp } health left`;
+      return `You have suffered ${ final_damage_amount } wounds and now have ${ this.c_hp } health left`;
     }
   }
 }
