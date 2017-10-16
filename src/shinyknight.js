@@ -18,34 +18,29 @@ export class ShinyKnight {
     type_of_damage, // NOTE: magic string value
     damage_amount,
     armor_penetration,
-    is_surprise_attack, // NOTE: boolean value
-    attacking_character // NOTE: not currently used
+    is_surprise_attack //, // NOTE: boolean value
+    // attacking_character // NOTE: not currently used
   ) {
-    // NOTE: temp binding to reduce impact of refactor
-    var d = damage_amount;
-    var d_type = type_of_damage;
-    var ap = armor_penetration;
-    var srpe_att = is_surprise_attack;
-    var char_att = attacking_character;
-
     // TODO: Explore if there is temporal coupling with these internals?
 
-    if(srpe_att) {
+    if(is_surprise_attack) {
       // NOTE: this feels like it belongs to the attacker, not the defender
-      d = this._adjust_surprise_attack_multipler(d);
+      damage_amount = this._adjust_surprise_attack_multipler(damage_amount);
     }
-    if(this._has_evaded(srpe_att)) {
-      d = this._adjust_evade_multiplier(d);
+    if(this._has_evaded(is_surprise_attack)) {
+      damage_amount = this._adjust_evade_multiplier(damage_amount);
     }
-    d = this._adjust_damage_type_resitances(d_type, d);
-    d = this._adjust_armor_resitances(srpe_att, ap, d);
-    d = this._adjust_appropriate_damage_range(d);
+    damage_amount = this._adjust_damage_type_resitances(type_of_damage, damage_amount);
+    if(!is_surprise_attack) {
+      damage_amount = this._adjust_armor_resitances(armor_penetration, damage_amount);
+    }
+    damage_amount = this._adjust_appropriate_damage_range(damage_amount);
 
-    this._apply_damage_to_character(d);
+    this._apply_damage_to_character(damage_amount);
 
     this._UNUSED_check_perform_counter_attack();
 
-    return this._format_response(d);
+    return this._format_response(damage_amount);
   }
 
   _apply_damage_to_character(final_damage_amount) {
@@ -98,21 +93,14 @@ export class ShinyKnight {
     }
   }
 
-  _adjust_armor_resitances(is_surprise_attack, armor_penetration, damage_amount) {
+  _adjust_armor_resitances(armor_penetration, damage_amount) {
     if(this.armor == RULES.ARMOR.LEATHER) {
-      if(!is_surprise_attack) { // characters don't get to use armor values when surprise attacked
-        return damage_amount - (RULES.ARMOR.LEATHER_DEFENSE - armor_penetration);
-      }
+      return damage_amount - (RULES.ARMOR.LEATHER_DEFENSE - armor_penetration);
     } else if(this.armor == RULES.ARMOR.CHAIN_MAIL) {
-      if(!is_surprise_attack) { // characters don't get to use armor values when surprise attacked
-        return damage_amount - (RULES.ARMOR.CHAIN_MAIL_DEFENSE - armor_penetration);
-      }
+      return damage_amount - (RULES.ARMOR.CHAIN_MAIL_DEFENSE - armor_penetration);
     } else if(this.armor == RULES.ARMOR.FULL_PLATE) {
-      if(!is_surprise_attack) { // characters don't get to use armor values when surprise attacked
-        return damage_amount - (RULES.ARMOR.FULL_PLATE_DEFENSE - armor_penetration);
-      }
+      return damage_amount - (RULES.ARMOR.FULL_PLATE_DEFENSE - armor_penetration);
     }
-
     return damage_amount;
   }
 
