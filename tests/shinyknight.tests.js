@@ -12,7 +12,7 @@ beforeEach(() => {
 
   // TODO: refactor tests to reflect final naming
   // NOTE: Temp naming reflects current responsibility
-  CUT.dmg = CUT.determine_damage_amount_and_apply_damage_from_attack_whether_suprise_or_not_and_possibly_counter_attack;
+  CUT.dmg = CUT.determine_damage_amount_and_apply_damage_from_attack_whether_suprise_or_not;
 
   CUT.armor = null;
   OPPONENT = new ShinyKnight();
