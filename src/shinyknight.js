@@ -27,10 +27,11 @@ export class ShinyKnight {
   }
 
   defend_against_attack(type_of_damage, damage_amount, armor_penetration) {
-    damage_amount = this._adjust_armor_resitances(armor_penetration, damage_amount);
     if(this._has_evaded()) {
       damage_amount = this._adjust_evade_multiplier(damage_amount);
     }
+    damage_amount = this._adjust_armor_resitances(armor_penetration, damage_amount);
+
     return this._process_defense(type_of_damage, damage_amount);
   }
 
