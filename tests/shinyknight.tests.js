@@ -9,6 +9,11 @@ let evade_chance;
 
 beforeEach(() => {
   CUT = new ShinyKnight();
+
+  // TODO: refactor tests to reflect final naming
+  // NOTE: Temp naming reflects current responsibility
+  CUT.dmg = CUT.determine_damage_amount_and_apply_damage_from_attack_whether_suprise_or_not_and_possibly_counter_attack;
+
   CUT.armor = null;
   OPPONENT = new ShinyKnight();
   evade_chance = sinon.stub(MATH, "evade_chance");

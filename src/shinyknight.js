@@ -13,13 +13,19 @@ export class ShinyKnight {
     this.weapon = 'Longsword';
   }
 
-  // d_type = the type of damage
-  // dmg = amount of damage attempting to deal
-  // ap = how well it penetrates armor
-  // srpe_att (bool) = was it a surprise attack?
-  // char_att = the attacking character
-  dmg( d_type, dmg, ap, srpe_att, char_att ) {
-    var d = dmg
+  determine_damage_amount_and_apply_damage_from_attack_whether_suprise_or_not_and_possibly_counter_attack(
+    type_of_damage, // NOTE: magic string value
+    damage_amount,
+    armor_penetration,
+    is_surprise_attack, // NOTE: boolean value
+    attacking_character // NOTE: not currently used
+  ) {
+    // NOTE: temp binding to reduce impact of refactor
+    var d = damage_amount;
+    var d_type = type_of_damage;
+    var ap = armor_penetration;
+    var srpe_att = is_surprise_attack;
+    var char_att = attacking_character;
 
     // surprise attacks do more damage
     if(srpe_att) {
