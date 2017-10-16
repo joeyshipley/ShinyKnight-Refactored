@@ -132,7 +132,7 @@ export class ShinyKnight {
     if(d == 0) {
       return 'You suffered no damage from the attack, way to go!';
     } else if(this.c_hp <= 0) {
-      this.c_lvl -= 1
+      if(this.c_lvl > 1) { this.c_lvl -= 1 }
       this.c_hp = 20;
       return `You ${ this.c_name } have perished. You respawn back at town square but have suffered loss in level. You are now level ${ this.c_lvl }`;
     } else {

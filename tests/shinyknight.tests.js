@@ -36,13 +36,19 @@ describe('ShinyKnights Battle Foes', () => {
       });
 
       it('it reduces the character level by 1', () => {
-        const result = CUT.dmg('unknown', 100, 0, false, OPPONENT);
+        CUT.dmg('unknown', 100, 0, false, OPPONENT);
         expect(CUT.c_lvl).to.equal(1);
       });
 
       it('it resets the hit points to 20', () => {
-        const result = CUT.dmg('unknown', 100, 0, false, OPPONENT);
+        CUT.dmg('unknown', 100, 0, false, OPPONENT);
         expect(CUT.c_hp).to.equal(20);
+      });
+
+      it('it does not allow the characters level to go below 1', () => {
+        CUT.c_lvl = 1;
+        CUT.dmg('unknown', 100, 0, false, OPPONENT);
+        expect(CUT.c_lvl).to.equal(1);
       });
     });
 
