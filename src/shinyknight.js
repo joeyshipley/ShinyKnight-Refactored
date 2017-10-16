@@ -15,7 +15,7 @@ export class ShinyKnight {
   }
 
   generate_attack(type_of_damage, damage_amount, armor_penatration, is_surprise_attack) {
-    // NOTE: out of scope of exercise. Would not pass in surprise if it were real code.
+    // NOTE: out of scope of exercise. Would not pass in these values, but rather generate from characters.
     if(is_surprise_attack) {
       damage_amount = this._adjust_surprise_attack_multipler(damage_amount);
     }
