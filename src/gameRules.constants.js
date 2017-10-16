@@ -43,14 +43,6 @@ export const RULES = {
     LIGHT: 'light',
     PSIONIC: 'psionic'
   },
-  ARMOR: {
-    LEATHER: 'Leather',
-    LEATHER_DEFENSE: 2,
-    CHAIN_MAIL: 'Chain mail',
-    CHAIN_MAIL_DEFENSE: 6,
-    FULL_PLATE: 'Full Plate',
-    FULL_PLATE_DEFENSE: 12
-  },
   WEAPON: {
     LONGSWORD: 'Longsword'
   }

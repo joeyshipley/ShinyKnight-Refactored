@@ -4,21 +4,21 @@ import { RULES } from './gameRules.constants';
 
 export class ShinyKnight {
 
-  constructor() {
+  constructor( armor ) {
     this.c_name = 'Sir Joseph';
     this.c_class = RULES.CHARACTER_CLASS.KNIGHT;
     this.c_lvl = 2;
     this.c_hp = 20;
     this.c_evade = 5 // 5% chance to reduce damage after resistances/def are calculated by 1/2;
     this.c_counter = 2 // 2% chance to counter an attack;
-    this.armor = RULES.ARMOR.LEATHER;
+    this.armor = armor;
     this.weapon = RULES.WEAPON.LONGSWORD;
   }
 
   generate_attack(type_of_damage, damage_amount, armor_penatration, is_surprise_attack) {
-    // NOTE: out of scope of exercise. Would not pass in these values, but rather generate from characters.
+    // NOTE: Out of scope of exercise. Quick/Inline code for this.
     if(is_surprise_attack) {
-      damage_amount = this._adjust_surprise_attack_multipler(damage_amount);
+      damage_amount = damage_amount * RULES.MODIFIER.SURPRISE_DAMAGE;
     }
     return {
       type_of_damage: type_of_damage,
@@ -55,10 +55,6 @@ export class ShinyKnight {
     return damage_amount / RULES.MODIFIER.EVADE_REDUCTION;
   }
 
-  _adjust_surprise_attack_multipler(damage_amount) {
-    return damage_amount * RULES.MODIFIER.SURPRISE_DAMAGE;
-  }
-
   _adjust_damage_type_resitances(type_of_damage, damage_amount) {
     switch(type_of_damage) {
       case RULES.DAMAGE_TYPE.STANDARD:
@@ -91,18 +87,15 @@ export class ShinyKnight {
   }
 
   _adjust_armor_resitances(armor_penetration, damage_amount) {
-    if(this.armor == RULES.ARMOR.LEATHER) {
-      return damage_amount - (RULES.ARMOR.LEATHER_DEFENSE - armor_penetration);
-    } else if(this.armor == RULES.ARMOR.CHAIN_MAIL) {
-      return damage_amount - (RULES.ARMOR.CHAIN_MAIL_DEFENSE - armor_penetration);
-    } else if(this.armor == RULES.ARMOR.FULL_PLATE) {
-      return damage_amount - (RULES.ARMOR.FULL_PLATE_DEFENSE - armor_penetration);
-    }
-    return damage_amount;
+    if(!this.armor) { return damage_amount; }
+
+    return this.armor.protect_from_attack(armor_penetration, damage_amount);
   }
 
   _adjust_appropriate_damage_range(damage_amount) {
-    return (damage_amount < RULES.CHECK.MIN_HEALTH) ? RULES.CHECK.MIN_HEALTH : Math.floor(damage_amount);
+    return (damage_amount < RULES.CHECK.MIN_HEALTH)
+      ? RULES.CHECK.MIN_HEALTH
+      : Math.floor(damage_amount);
   }
 
   _format_response(damage_amount) {

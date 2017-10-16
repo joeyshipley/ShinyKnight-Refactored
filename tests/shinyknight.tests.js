@@ -3,13 +3,15 @@ import sinon from 'sinon';
 import { expect } from 'chai';
 import { ShinyKnight } from '../src/shinyknight.js';
 import { MATH } from '../src/util/math.utils';
+import { ChainMailArmor } from '../src/equipment/chainmail.armor';
+import { FullPlateArmor } from '../src/equipment/fullplate.armor';
+import { LeatherArmor } from '../src/equipment/leather.armor';
 
 let CUT, OPPONENT;
 let roll_100;
 
 beforeEach(() => {
-  CUT = new ShinyKnight();
-  CUT.armor = null;
+  CUT = new ShinyKnight(null);
   roll_100 = sinon.stub(MATH, "roll_100");
   roll_100.callsFake(() => { return 1; });
 
@@ -73,7 +75,7 @@ describe('ShinyKnights Battle Foes', () => {
       });
 
       it('it does not take armor penetration into account', () => {
-        CUT.armor = 'Leather';
+        CUT.armor = new LeatherArmor();
         const attack = OPPONENT.generate_attack('unknown', 8, 2, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 8 wounds and now have 12 health left');
@@ -82,21 +84,21 @@ describe('ShinyKnights Battle Foes', () => {
 
     describe('and they are wearing leather armor,', () => {
       it('it applies reduced damage', () => {
-        CUT.armor = 'Leather';
+        CUT.armor = new LeatherArmor();
         const attack = OPPONENT.generate_attack('unknown', 15, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 13 wounds and now have 7 health left');
       });
 
       it('it does not protect when surprised', () => {
-        CUT.armor = 'Leather';
+        CUT.armor = new LeatherArmor();
         const attack = OPPONENT.generate_attack('unknown', 10, null, true);
         const result = CUT.defend_against_surprise_attack(attack.type_of_damage, attack.damage_amount);
         expect(result).to.equal('You have suffered 15 wounds and now have 5 health left');
       });
 
       it('it\'s effectiveness is reduced from armor penetration', () => {
-        CUT.armor = 'Leather';
+        CUT.armor = new LeatherArmor();
         const attack = OPPONENT.generate_attack('unknown', 15, 2, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 15 wounds and now have 5 health left');
@@ -105,21 +107,21 @@ describe('ShinyKnights Battle Foes', () => {
 
     describe('and they are wearing chain mail,', () => {
       it('it applies reduced damage', () => {
-        CUT.armor = 'Chain mail';
+        CUT.armor = new ChainMailArmor();
         const attack = OPPONENT.generate_attack('unknown', 15, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 9 wounds and now have 11 health left');
       });
 
       it('it does not protect when surprised', () => {
-        CUT.armor = 'Chain mail';
+        CUT.armor = new ChainMailArmor();
         const attack = OPPONENT.generate_attack('unknown', 10, null, true);
         const result = CUT.defend_against_surprise_attack(attack.type_of_damage, attack.damage_amount);
         expect(result).to.equal('You have suffered 15 wounds and now have 5 health left');
       });
 
       it('it\'s effectiveness is reduced from armor penetration', () => {
-        CUT.armor = 'Chain mail';
+        CUT.armor = new ChainMailArmor();
         const attack = OPPONENT.generate_attack('unknown', 15, 2, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 11 wounds and now have 9 health left');
@@ -128,21 +130,21 @@ describe('ShinyKnights Battle Foes', () => {
 
     describe('and they are wearing full plate,', () => {
       it('it applies reduced damage', () => {
-        CUT.armor = 'Full Plate';
+        CUT.armor = new FullPlateArmor();
         const attack = OPPONENT.generate_attack('unknown', 15, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 3 wounds and now have 17 health left');
       });
 
       it('it does not protect when surprised', () => {
-        CUT.armor = 'Full Plate';
+        CUT.armor = new FullPlateArmor();
         const attack = OPPONENT.generate_attack('unknown', 10, null, true);
         const result = CUT.defend_against_surprise_attack(attack.type_of_damage, attack.damage_amount);
         expect(result).to.equal('You have suffered 15 wounds and now have 5 health left');
       });
 
       it('it\'s effectiveness is reduced from armor penetration', () => {
-        CUT.armor = 'Full Plate';
+        CUT.armor = new FullPlateArmor();
         const attack = OPPONENT.generate_attack('unknown', 15, 2, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 5 wounds and now have 15 health left');
