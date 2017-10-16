@@ -14,6 +14,24 @@ export class ShinyKnight {
     this.weapon = RULES.WEAPON.LONGSWORD;
   }
 
+  defend_against_attack(type_of_damage, damage_amount, armor_penetration) {
+    return this.determine_damage_amount_and_apply_damage_from_attack_whether_suprise_or_not(
+      type_of_damage,
+      damage_amount,
+      armor_penetration,
+      false
+    );
+  }
+
+  defend_against_surprise_attack(type_of_damage, damage_amount) {
+    return this.determine_damage_amount_and_apply_damage_from_attack_whether_suprise_or_not(
+      type_of_damage,
+      damage_amount,
+      null,
+      true
+    );
+  }
+
   determine_damage_amount_and_apply_damage_from_attack_whether_suprise_or_not(
     type_of_damage,
     damage_amount,
