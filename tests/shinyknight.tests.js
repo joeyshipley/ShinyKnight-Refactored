@@ -438,8 +438,3 @@ describe('ShinyKnights Battle Foes', () => {
 
   });
 });
-
-describe('ShinyKnights Battle Foes', () => {
-  describe('#dmg => When our Experienced Templar is concerned about what their profession is', () => {
-  });
-});

@@ -15,7 +15,7 @@ export class ShinyKnight {
   }
 
   determine_damage_amount_and_apply_damage_from_attack_whether_suprise_or_not_and_possibly_counter_attack(
-    type_of_damage, // NOTE: magic string value
+    type_of_damage,
     damage_amount,
     armor_penetration,
     is_surprise_attack //, // NOTE: boolean value
