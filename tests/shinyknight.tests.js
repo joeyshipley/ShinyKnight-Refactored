@@ -4,9 +4,7 @@ import { expect } from 'chai';
 
 import { MATH } from '../src/util/math.utils';
 import { RULES } from '../src/gameRules.constants';
-import { Knight } from '../src/character/knight.character.js';
-import { Wizard } from '../src/character/wizard.character.js';
-import { Shinobi } from '../src/character/shinobi.character.js';
+import { build_knight, build_wizard, build_shinobi } from '../src/character/character.factory.js';
 import { ChainMailArmor } from '../src/equipment/chainmail.armor';
 import { FullPlateArmor } from '../src/equipment/fullplate.armor';
 import { LeatherArmor } from '../src/equipment/leather.armor';
@@ -15,11 +13,11 @@ let CUT, OPPONENT;
 let roll_100;
 
 beforeEach(() => {
-  CUT = new Knight(null);
+  CUT = build_knight();
   roll_100 = sinon.stub(MATH, "roll_100");
   roll_100.callsFake(() => { return 1; });
 
-  OPPONENT = new Knight();
+  OPPONENT = build_knight();
 });
 
 afterEach(() => {
@@ -194,91 +192,91 @@ describe('ShinyKnights Battle Foes', () => {
 
     describe('and they are a Knights receiving an attack,', () => {
       it('it\'s standard attack reduced damage', () => {
-        CUT = new Knight();
+        CUT = build_knight();
         const attack = OPPONENT.generate_attack('standard', 11, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 1 wounds and now have 19 health left');
       });
 
       it('it\'s magic attack reduced damage', () => {
-        CUT = new Knight();
+        CUT = build_knight();
         const attack = OPPONENT.generate_attack('magic', 11, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 10 wounds and now have 10 health left');
       });
 
       it('it\'s shadow attack reduced damage', () => {
-        CUT = new Knight();
+        CUT = build_knight();
         const attack = OPPONENT.generate_attack('shadow', 11, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 10 wounds and now have 10 health left');
       });
 
       it('it\'s earth attack reduced damage', () => {
-        CUT = new Knight();
+        CUT = build_knight();
         const attack = OPPONENT.generate_attack('earth', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s fire attack reduced damage', () => {
-        CUT = new Knight();
+        CUT = build_knight();
         const attack = OPPONENT.generate_attack('fire', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s water attack reduced damage', () => {
-        CUT = new Knight();
+        CUT = build_knight();
         const attack = OPPONENT.generate_attack('water', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s wind attack reduced damage', () => {
-        CUT = new Knight();
+        CUT = build_knight();
         const attack = OPPONENT.generate_attack('wind', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s ice attack reduced damage', () => {
-        CUT = new Knight();
+        CUT = build_knight();
         const attack = OPPONENT.generate_attack('ice', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s lightning attack reduced damage', () => {
-        CUT = new Knight();
+        CUT = build_knight();
         const attack = OPPONENT.generate_attack('lightning', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s dark attack reduced damage', () => {
-        CUT = new Knight();
+        CUT = build_knight();
         const attack = OPPONENT.generate_attack('dark', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s light attack reduced damage', () => {
-        CUT = new Knight();
+        CUT = build_knight();
         const attack = OPPONENT.generate_attack('light', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s psionic attack reduced damage', () => {
-        CUT = new Knight();
+        CUT = build_knight();
         const attack = OPPONENT.generate_attack('psionic', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('unspecified attack does not reduced damage', () => {
-        CUT = new Knight();
+        CUT = build_knight();
         const attack = OPPONENT.generate_attack(RULES.DAMAGE_TYPE.UNKNOWN, 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 1 wounds and now have 19 health left');
@@ -287,91 +285,91 @@ describe('ShinyKnights Battle Foes', () => {
 
     describe('and they are a Wizard receiving an attack,', () => {
       it('it\'s standard attack reduced damage', () => {
-        CUT = new Wizard();
+        CUT = build_wizard();
         const attack = OPPONENT.generate_attack('standard', 11, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 11 wounds and now have 9 health left');
       });
 
       it('it\'s magic attack reduced damage', () => {
-        CUT = new Wizard();
+        CUT = build_wizard();
         const attack = OPPONENT.generate_attack('magic', 11, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 1 wounds and now have 19 health left');
       });
 
       it('it\'s shadow attack reduced damage', () => {
-        CUT = new Wizard();
+        CUT = build_wizard();
         const attack = OPPONENT.generate_attack('shadow', 11, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 10 wounds and now have 10 health left');
       });
 
       it('it\'s earth attack reduced damage', () => {
-        CUT = new Wizard();
+        CUT = build_wizard();
         const attack = OPPONENT.generate_attack('earth', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s fire attack reduced damage', () => {
-        CUT = new Wizard();
+        CUT = build_wizard();
         const attack = OPPONENT.generate_attack('fire', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s water attack reduced damage', () => {
-        CUT = new Wizard();
+        CUT = build_wizard();
         const attack = OPPONENT.generate_attack('water', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s wind attack reduced damage', () => {
-        CUT = new Wizard();
+        CUT = build_wizard();
         const attack = OPPONENT.generate_attack('wind', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s ice attack reduced damage', () => {
-        CUT = new Wizard();
+        CUT = build_wizard();
         const attack = OPPONENT.generate_attack('ice', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s lightning attack reduced damage', () => {
-        CUT = new Wizard();
+        CUT = build_wizard();
         const attack = OPPONENT.generate_attack('lightning', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s dark attack reduced damage', () => {
-        CUT = new Wizard();
+        CUT = build_wizard();
         const attack = OPPONENT.generate_attack('dark', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s light attack reduced damage', () => {
-        CUT = new Wizard();
+        CUT = build_wizard();
         const attack = OPPONENT.generate_attack('light', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s psionic attack reduced damage', () => {
-        CUT = new Wizard();
+        CUT = build_wizard();
         const attack = OPPONENT.generate_attack('psionic', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('unspecified attack does not reduced damage', () => {
-        CUT = new Wizard();
+        CUT = build_wizard();
         const attack = OPPONENT.generate_attack(RULES.DAMAGE_TYPE.UNKNOWN, 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 1 wounds and now have 19 health left');
@@ -380,91 +378,91 @@ describe('ShinyKnights Battle Foes', () => {
 
     describe('and they are a Shinobi receiving an attack,', () => {
       it('it\'s standard attack reduced damage', () => {
-        CUT = new Shinobi();
+        CUT = build_shinobi();
         const attack = OPPONENT.generate_attack('standard', 11, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 11 wounds and now have 9 health left');
       });
 
       it('it\'s magic attack reduced damage', () => {
-        CUT = new Shinobi();
+        CUT = build_shinobi();
         const attack = OPPONENT.generate_attack('magic', 11, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 10 wounds and now have 10 health left');
       });
 
       it('it\'s shadow attack reduced damage', () => {
-        CUT = new Shinobi();
+        CUT = build_shinobi();
         const attack = OPPONENT.generate_attack('shadow', 11, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 1 wounds and now have 19 health left');
       });
 
       it('it\'s earth attack reduced damage', () => {
-        CUT = new Shinobi();
+        CUT = build_shinobi();
         const attack = OPPONENT.generate_attack('earth', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s fire attack reduced damage', () => {
-        CUT = new Shinobi();
+        CUT = build_shinobi();
         const attack = OPPONENT.generate_attack('fire', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s water attack reduced damage', () => {
-        CUT = new Shinobi();
+        CUT = build_shinobi();
         const attack = OPPONENT.generate_attack('water', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s wind attack reduced damage', () => {
-        CUT = new Shinobi();
+        CUT = build_shinobi();
         const attack = OPPONENT.generate_attack('wind', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s ice attack reduced damage', () => {
-        CUT = new Shinobi();
+        CUT = build_shinobi();
         const attack = OPPONENT.generate_attack('ice', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s lightning attack reduced damage', () => {
-        CUT = new Shinobi();
+        CUT = build_shinobi();
         const attack = OPPONENT.generate_attack('lightning', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s dark attack reduced damage', () => {
-        CUT = new Shinobi();
+        CUT = build_shinobi();
         const attack = OPPONENT.generate_attack('dark', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s light attack reduced damage', () => {
-        CUT = new Shinobi();
+        CUT = build_shinobi();
         const attack = OPPONENT.generate_attack('light', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('it\'s psionic attack reduced damage', () => {
-        CUT = new Shinobi();
+        CUT = build_shinobi();
         const attack = OPPONENT.generate_attack('psionic', 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You suffered no damage from the attack, way to go!');
       });
 
       it('unspecified attack does not reduced damage', () => {
-        CUT = new Shinobi();
+        CUT = build_shinobi();
         const attack = OPPONENT.generate_attack(RULES.DAMAGE_TYPE.UNKNOWN, 1, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
         expect(result).to.equal('You have suffered 1 wounds and now have 19 health left');

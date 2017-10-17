@@ -1,21 +1,17 @@
 import { MATH } from '../util/math.utils.js';
 import { CHECK } from '../util/check.utils.js';
 import { RULES } from '../gameRules.constants';
-import { build_resistances } from './resistances.factory';
 
 export class Character {
 
-  constructor( character_class, armor ) {
+  constructor( name, character_class, level, hp, evade_chance, type_resistances, armor ) {
     this.c_class = character_class
-    this.c_name = 'Sir Joseph';
-    this.c_lvl = 2;
-    this.c_hp = 20;
-    this.c_evade = 5 // 5% chance to reduce damage after resistances/def are calculated by 1/2;
-    this.c_counter = 2 // 2% chance to counter an attack;
+    this.c_name = name;
+    this.c_lvl = level;
+    this.c_hp = hp;
+    this.c_evade = evade_chance;
     this.armor = armor;
-    this.weapon = RULES.WEAPON.LONGSWORD;
-
-    this._type_resistances = build_resistances(this);
+    this.type_resistances = type_resistances;
   }
 
   generate_attack(type_of_damage, damage_amount, armor_penatration, is_surprise_attack) {
@@ -61,7 +57,7 @@ export class Character {
   }
 
   _adjust_damage_type_resitances(type_of_damage, damage_amount) {
-    const resistance = this._type_resistances.find((r) => { return r.resistance_type == type_of_damage });
+    const resistance = this.type_resistances.find((r) => { return r.resistance_type == type_of_damage });
     return (resistance) ? resistance.adjust_damage_for_type(damage_amount) : damage_amount;
   }
 

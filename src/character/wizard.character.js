@@ -2,7 +2,7 @@ import { RULES } from '../gameRules.constants';
 import { Character } from './character';
 
 export class Wizard extends Character {
-  constructor(armor) {
-    super(RULES.CHARACTER_CLASS.WIZARD, armor);
+  constructor(name, level, hp, evade_chance, type_resistances, armor) {
+    super(name, RULES.CHARACTER_CLASS.WIZARD, level, hp, evade_chance, type_resistances, armor);
   }
 }
