@@ -8,7 +8,7 @@ export const CHECK = {
   },
 
   is_defeated: (character) => {
-    return character.c_hp <= RULES.CHECK.MIN_HEALTH;
+    return character.health_points <= RULES.CHECK.MIN_HEALTH;
   }
 
 };

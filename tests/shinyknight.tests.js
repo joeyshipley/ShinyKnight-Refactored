@@ -45,20 +45,20 @@ describe('ShinyKnights Battle Foes', () => {
       it('it reduces the character level by 1', () => {
         const attack = OPPONENT.generate_attack(RULES.DAMAGE_TYPE.UNKNOWN, 100, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
-        expect(CUT.c_lvl).to.equal(1);
+        expect(CUT.level).to.equal(1);
       });
 
       it('it resets the hit points to 20', () => {
         const attack = OPPONENT.generate_attack(RULES.DAMAGE_TYPE.UNKNOWN, 100, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
-        expect(CUT.c_hp).to.equal(20);
+        expect(CUT.health_points).to.equal(20);
       });
 
       it('it does not allow the characters level to go below 1', () => {
-        CUT.c_lvl = 1;
+        CUT.level = 1;
         const attack = OPPONENT.generate_attack(RULES.DAMAGE_TYPE.UNKNOWN, 100, 0, false);
         const result = CUT.defend_against_attack(attack.type_of_damage, attack.damage_amount, attack.armor_penatration);
-        expect(CUT.c_lvl).to.equal(1);
+        expect(CUT.level).to.equal(1);
       });
     });
 

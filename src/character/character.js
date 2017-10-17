@@ -5,10 +5,10 @@ import { RULES } from '../gameRules.constants';
 export class Character {
 
   constructor( name, level, hp, evade_chance, type_resistances, armor ) {
-    this.c_name = name;
-    this.c_lvl = level;
-    this.c_hp = hp;
-    this.c_evade = evade_chance;
+    this.name = name;
+    this.level = level;
+    this.health_points = hp;
+    this.evade_chance = evade_chance;
     this.armor = armor;
     this.type_resistances = type_resistances;
   }
@@ -26,7 +26,7 @@ export class Character {
   }
 
   defend_against_attack(type_of_damage, damage_amount, armor_penetration) {
-    if(CHECK.has_evaded(this.c_evade)) {
+    if(CHECK.has_evaded(this.evade_chance)) {
       damage_amount = this._adjust_evade_multiplier(damage_amount);
     }
     damage_amount = this._adjust_armor_resitances(armor_penetration, damage_amount);
@@ -48,7 +48,7 @@ export class Character {
   }
 
   _apply_damage_to_character(damage_amount) {
-    this.c_hp -= damage_amount;
+    this.health_points -= damage_amount;
   }
 
   _adjust_evade_multiplier(damage_amount) {
@@ -86,8 +86,8 @@ export class Character {
     const action_result = this._determine_action_result(final_damage_amount);
 
     if(CHECK.is_defeated(this)) {
-      if(this.c_lvl > RULES.CHECK.MIN_LEVEL) { this.c_lvl -= 1 }
-      this.c_hp = 20;
+      if(this.level > RULES.CHECK.MIN_LEVEL) { this.level -= 1 }
+      this.health_points = 20;
     }
 
     return action_result;
@@ -98,9 +98,9 @@ export class Character {
       case RULES.DEFENSE_RESULT.NO_DAMAGE:
         return 'You suffered no damage from the attack, way to go!';
       case RULES.DEFENSE_RESULT.DAMAGE_TAKEN:
-        return `You have suffered ${ final_damage_amount } wounds and now have ${ this.c_hp } health left`;
+        return `You have suffered ${ final_damage_amount } wounds and now have ${ this.health_points } health left`;
       case RULES.DEFENSE_RESULT.CHARACTER_DEFEATED:
-        return `You ${ this.c_name } have perished. You respawn back at town square but have suffered loss in level. You are now level ${ this.c_lvl }`;
+        return `You ${ this.name } have perished. You respawn back at town square but have suffered loss in level. You are now level ${ this.level }`;
     }
   }
 }
