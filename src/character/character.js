@@ -45,13 +45,15 @@ export class Character {
 
   _process_defense(type_of_damage, damage_amount) {
     damage_amount = this._adjust_damage_type_resitances(type_of_damage, damage_amount);
-    this._apply_damage_to_character(damage_amount);
-    return this._format_response(damage_amount);
+    const final_damage_amount = this._adjust_appropriate_damage_range(damage_amount);
+    this._apply_damage_to_character(final_damage_amount);
+    const action_result = this._process_result(final_damage_amount);
+
+    return this._format_response(action_result, final_damage_amount);
   }
 
   _apply_damage_to_character(damage_amount) {
-    const final_damage_amount = this._adjust_appropriate_damage_range(damage_amount);
-    this.c_hp -= final_damage_amount;
+    this.c_hp -= damage_amount;
   }
 
   _adjust_evade_multiplier(damage_amount) {
@@ -75,16 +77,35 @@ export class Character {
       : Math.floor(damage_amount);
   }
 
-  _format_response(damage_amount) {
-    const final_damage_amount = this._adjust_appropriate_damage_range(damage_amount);
+  _determine_action_result(final_damage_amount) {
     if(final_damage_amount == RULES.CHECK.NO_DAMAGE) {
-      return 'You suffered no damage from the attack, way to go!';
-    } else if(this.c_hp <= RULES.CHECK.MIN_HEALTH) {
+      return RULES.DEFENSE_RESULT.NO_DAMAGE;
+    } else if(CHECK.is_defeated(this)) {
+      return RULES.DEFENSE_RESULT.CHARACTER_DEFEATED;
+    } else {
+      return RULES.DEFENSE_RESULT.DAMAGE_TAKEN;
+    }
+  }
+
+  _process_result(final_damage_amount) {
+    const action_result = this._determine_action_result(final_damage_amount);
+
+    if(CHECK.is_defeated(this)) {
       if(this.c_lvl > RULES.CHECK.MIN_LEVEL) { this.c_lvl -= 1 }
       this.c_hp = 20;
-      return `You ${ this.c_name } have perished. You respawn back at town square but have suffered loss in level. You are now level ${ this.c_lvl }`;
-    } else {
-      return `You have suffered ${ final_damage_amount } wounds and now have ${ this.c_hp } health left`;
+    }
+
+    return action_result;
+  }
+
+  _format_response(action_result, final_damage_amount) {
+    switch(action_result) {
+      case RULES.DEFENSE_RESULT.NO_DAMAGE:
+        return 'You suffered no damage from the attack, way to go!';
+      case RULES.DEFENSE_RESULT.DAMAGE_TAKEN:
+        return `You have suffered ${ final_damage_amount } wounds and now have ${ this.c_hp } health left`;
+      case RULES.DEFENSE_RESULT.CHARACTER_DEFEATED:
+        return `You ${ this.c_name } have perished. You respawn back at town square but have suffered loss in level. You are now level ${ this.c_lvl }`;
     }
   }
 }

@@ -46,5 +46,10 @@ export const RULES = {
   },
   WEAPON: {
     LONGSWORD: 'Longsword'
+  },
+  DEFENSE_RESULT: {
+    NO_DAMAGE: 'NO_DAMAGE',
+    DAMAGE_TAKEN: 'DAMAGE_TAKEN',
+    CHARACTER_DEFEATED: 'CHARACTER_DEFEATED'
   }
 }
