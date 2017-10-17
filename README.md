@@ -1,4 +1,4 @@
-# ShinyKnight Kata in ES6
+# ShinyKnight Kata in ES6 (Work in Progress)
 
 Readability Kata: https://github.com/joeyshipley/shinyknight-kata-js
 
