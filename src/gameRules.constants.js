@@ -30,6 +30,7 @@ export const RULES = {
     PSIONIC: 1
   },
   DAMAGE_TYPE: {
+    UNKNOWN: '',
     STANDARD: 'standard',
     MAGIC: 'magic',
     EARTH: 'earth',

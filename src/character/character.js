@@ -1,18 +1,21 @@
-import { MATH } from './util/math.utils.js';
-import { CHECK } from './util/check.utils.js';
-import { RULES } from './gameRules.constants';
+import { MATH } from '../util/math.utils.js';
+import { CHECK } from '../util/check.utils.js';
+import { RULES } from '../gameRules.constants';
+import { build_resistances } from './resistances.factory';
 
-export class ShinyKnight {
+export class Character {
 
-  constructor( armor ) {
+  constructor( character_class, armor ) {
+    this.c_class = character_class
     this.c_name = 'Sir Joseph';
-    this.c_class = RULES.CHARACTER_CLASS.KNIGHT;
     this.c_lvl = 2;
     this.c_hp = 20;
     this.c_evade = 5 // 5% chance to reduce damage after resistances/def are calculated by 1/2;
     this.c_counter = 2 // 2% chance to counter an attack;
     this.armor = armor;
     this.weapon = RULES.WEAPON.LONGSWORD;
+
+    this._type_resistances = build_resistances(this);
   }
 
   generate_attack(type_of_damage, damage_amount, armor_penatration, is_surprise_attack) {
@@ -56,34 +59,8 @@ export class ShinyKnight {
   }
 
   _adjust_damage_type_resitances(type_of_damage, damage_amount) {
-    switch(type_of_damage) {
-      case RULES.DAMAGE_TYPE.STANDARD:
-        return this.c_class == RULES.CHARACTER_CLASS.KNIGHT ? damage_amount - 10 : damage_amount - RULES.RESIST_TYPE_BASE_VALUE.STANDARD; // Warriors get a special resistance to standard damage
-      case RULES.DAMAGE_TYPE.MAGIC:
-        return this.c_class == RULES.CHARACTER_CLASS.WIZARD ? damage_amount - 10 : damage_amount - RULES.RESIST_TYPE_BASE_VALUE.MAGIC; // Magi get a special resistance to magic damage
-      case RULES.DAMAGE_TYPE.EARTH:
-        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.EARTH;
-      case RULES.DAMAGE_TYPE.FIRE:
-        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.FIRE;
-      case RULES.DAMAGE_TYPE.WATER:
-        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.WATER;
-      case RULES.DAMAGE_TYPE.WIND:
-        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.WIND;
-      case RULES.DAMAGE_TYPE.SHADOW:
-        return this.c_class == RULES.CHARACTER_CLASS.SHINOBI ? damage_amount - 10 : damage_amount - RULES.RESIST_TYPE_BASE_VALUE.SHADOW; // Rogue get a special resistance to shadow damage
-      case RULES.DAMAGE_TYPE.ICE:
-        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.ICE;
-      case RULES.DAMAGE_TYPE.LIGHTNING:
-        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.LIGHTNING;
-      case RULES.DAMAGE_TYPE.DARK:
-        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.DARK;
-      case RULES.DAMAGE_TYPE.LIGHT:
-        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.LIGHT;
-      case RULES.DAMAGE_TYPE.PSIONIC:
-        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.PSIONIC;
-      default:
-        return damage_amount - RULES.RESIST_TYPE_BASE_VALUE.UNKNOWN;
-    }
+    const resistance = this._type_resistances.find((r) => { return r.resistance_type == type_of_damage });
+    return (resistance) ? resistance.adjust_damage_for_type(damage_amount) : damage_amount;
   }
 
   _adjust_armor_resitances(armor_penetration, damage_amount) {
