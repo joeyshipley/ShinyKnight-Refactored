@@ -4,8 +4,7 @@ import { RULES } from '../gameRules.constants';
 
 export class Character {
 
-  constructor( name, character_class, level, hp, evade_chance, type_resistances, armor ) {
-    this.c_class = character_class
+  constructor( name, level, hp, evade_chance, type_resistances, armor ) {
     this.c_name = name;
     this.c_lvl = level;
     this.c_hp = hp;
