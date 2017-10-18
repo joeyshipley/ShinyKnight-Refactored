@@ -9,11 +9,6 @@ export const RULES = {
     SURPRISE_DAMAGE: 1.5,
     EVADE_REDUCTION: 1.25
   },
-  CHARACTER_CLASS: {
-    KNIGHT: 'Knight',
-    WIZARD: 'Wizard',
-    SHINOBI: 'Shinobi'
-  },
   RESIST_TYPE_BASE_VALUE: {
     UNKNOWN: 0,
     STANDARD: 0,
@@ -43,9 +38,6 @@ export const RULES = {
     DARK: 'dark',
     LIGHT: 'light',
     PSIONIC: 'psionic'
-  },
-  WEAPON: {
-    LONGSWORD: 'Longsword'
   },
   DEFENSE_RESULT: {
     NO_DAMAGE: 'NO_DAMAGE',

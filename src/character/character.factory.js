@@ -11,19 +11,19 @@ const hp = 20;
 const evade_chance = 5;
 
 export function build_knight( armor ) {
-  const resistances = build_resistances(RULES.CHARACTER_CLASS.KNIGHT);
+  const resistances = build_resistances();
   let character = new Knight(name, level, hp, evade_chance, resistances, armor);
   return character;
 }
 
 export function build_wizard( armor ) {
-  const resistances = build_resistances(RULES.CHARACTER_CLASS.WIZARD);
+  const resistances = build_resistances();
   let character = new Wizard(name, level, hp, evade_chance, resistances, armor);
   return character;
 }
 
 export function build_shinobi( armor ) {
-  const resistances = build_resistances(RULES.CHARACTER_CLASS.SHINOBI);
+  const resistances = build_resistances();
   let character = new Shinobi(name, level, hp, evade_chance, resistances, armor);
   return character;
 }
