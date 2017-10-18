@@ -6,7 +6,7 @@ export function defend_action(defender, type_of_damage, damage_amount, armor_pen
   if(CHECK.has_evaded(defender.evade_chance)) {
     damage_amount = _adjust_evade_multiplier(damage_amount);
   }
-  damage_amount = _adjust_armor_resitances(defender, armor_penetration, damage_amount);
+  damage_amount = _adjust_armor_resitances(defender.armor, armor_penetration, damage_amount);
 
   return _base_action(defender, type_of_damage, damage_amount);
 }
@@ -16,7 +16,7 @@ export function defend_surprise_attack_action(defender, type_of_damage, damage_a
 }
 
 function _base_action(defender, type_of_damage, damage_amount) {
-  damage_amount = _adjust_damage_type_resitances(defender, type_of_damage, damage_amount);
+  damage_amount = _adjust_damage_type_resitances(defender.type_resistances, type_of_damage, damage_amount);
   const final_damage_amount = Math.floor(damage_amount);
   const action_result = _process_action(defender, final_damage_amount);
 
@@ -59,13 +59,13 @@ function _adjust_evade_multiplier(damage_amount) {
   return damage_amount / RULES.MODIFIER.EVADE_REDUCTION;
 }
 
-function _adjust_armor_resitances(defender, armor_penetration, damage_amount) {
-  if(!defender.armor) { return damage_amount; }
+function _adjust_armor_resitances(armor, armor_penetration, damage_amount) {
+  if(!armor) { return damage_amount; }
 
-  return defender.armor.protect_from_attack(armor_penetration, damage_amount);
+  return armor.protect_from_attack(armor_penetration, damage_amount);
 }
 
-function _adjust_damage_type_resitances(defender, type_of_damage, damage_amount) {
-  const resistance = defender.type_resistances.find((r) => { return r.resistance_type == type_of_damage });
+function _adjust_damage_type_resitances(type_resistances, type_of_damage, damage_amount) {
+  const resistance = type_resistances.find((r) => { return r.resistance_type == type_of_damage });
   return (resistance) ? resistance.adjust_damage_for_type(damage_amount) : damage_amount;
 }
