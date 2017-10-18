@@ -4,6 +4,7 @@ import { Wizard } from './wizard.character';
 import { Shinobi } from './shinobi.character';
 import { AttackResistance } from './attackResistance';
 
+// NOTE: fake values for exercise, factory would handle this or have them passed in.
 const name = 'Sir Joseph';
 const level = 2;
 const hp = 20;
@@ -30,17 +31,13 @@ export function build_shinobi( armor ) {
 function build_resistances(character_class) {
   let resistances = [];
 
-  const standard_resistance = (character_class == RULES.CHARACTER_CLASS.KNIGHT ? 10 : RULES.RESIST_TYPE_BASE_VALUE.STANDARD);
-  const magic_resistance = (character_class == RULES.CHARACTER_CLASS.WIZARD ? 10 : RULES.RESIST_TYPE_BASE_VALUE.MAGIC);
-  const shadow_resistance = (character_class == RULES.CHARACTER_CLASS.SHINOBI ? 10 : RULES.RESIST_TYPE_BASE_VALUE.SHADOW);
-
-  resistances.push(new AttackResistance(RULES.DAMAGE_TYPE.STANDARD, standard_resistance));
-  resistances.push(new AttackResistance(RULES.DAMAGE_TYPE.MAGIC, magic_resistance));
+  resistances.push(new AttackResistance(RULES.DAMAGE_TYPE.STANDARD, RULES.RESIST_TYPE_BASE_VALUE.STANDARD));
+  resistances.push(new AttackResistance(RULES.DAMAGE_TYPE.MAGIC, RULES.RESIST_TYPE_BASE_VALUE.MAGIC));
   resistances.push(new AttackResistance(RULES.DAMAGE_TYPE.EARTH, RULES.RESIST_TYPE_BASE_VALUE.EARTH));
   resistances.push(new AttackResistance(RULES.DAMAGE_TYPE.FIRE, RULES.RESIST_TYPE_BASE_VALUE.FIRE));
   resistances.push(new AttackResistance(RULES.DAMAGE_TYPE.WATER, RULES.RESIST_TYPE_BASE_VALUE.WATER));
   resistances.push(new AttackResistance(RULES.DAMAGE_TYPE.WIND, RULES.RESIST_TYPE_BASE_VALUE.WIND));
-  resistances.push(new AttackResistance(RULES.DAMAGE_TYPE.SHADOW, shadow_resistance));
+  resistances.push(new AttackResistance(RULES.DAMAGE_TYPE.SHADOW, RULES.RESIST_TYPE_BASE_VALUE.SHADOW));
   resistances.push(new AttackResistance(RULES.DAMAGE_TYPE.ICE, RULES.RESIST_TYPE_BASE_VALUE.ICE));
   resistances.push(new AttackResistance(RULES.DAMAGE_TYPE.LIGHTNING, RULES.RESIST_TYPE_BASE_VALUE.LIGHTNING));
   resistances.push(new AttackResistance(RULES.DAMAGE_TYPE.DARK, RULES.RESIST_TYPE_BASE_VALUE.DARK));
